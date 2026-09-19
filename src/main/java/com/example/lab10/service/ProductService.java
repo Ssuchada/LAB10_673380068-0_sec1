@@ -40,9 +40,12 @@ public class ProductService {
      *       .switchIfEmpty(Mono.error(new RuntimeException(...)))
      */
     public Mono<Product> getById(String id) {
-        // TODO: เติม code ตรงนี้
-       Mono<Product> p = repository.findById(id).switchIfEmpty(Mono.error(new RuntimeException("Product not found: " + id)));
-        return p; // ← แก้บรรทัดนี้
+        return repository.findById(id)
+                .switchIfEmpty(
+                        Mono.error(
+                                new RuntimeException("Product not found: " + id)
+                        )
+                );
     }
 
     // ── 2. ดึง Product ทั้งหมด ───────────────────────────
