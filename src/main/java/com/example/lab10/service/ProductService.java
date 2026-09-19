@@ -41,7 +41,8 @@ public class ProductService {
      */
     public Mono<Product> getById(String id) {
         // TODO: เติม code ตรงนี้
-        return null; // ← แก้บรรทัดนี้
+       Mono<Product> p = repository.findById(id).switchIfEmpty(Mono.error(new RuntimeException("Product not found: " + id)));
+        return p; // ← แก้บรรทัดนี้
     }
 
     // ── 2. ดึง Product ทั้งหมด ───────────────────────────
@@ -50,7 +51,7 @@ public class ProductService {
      */
     public Flux<Product> getAll() {
         // TODO: เติม code ตรงนี้
-        return null; // ← แก้บรรทัดนี้
+        return repository.findAll(); // ← แก้บรรทัดนี้
     }
 
     // ── 3. บันทึก Product ────────────────────────────────
@@ -62,7 +63,10 @@ public class ProductService {
      */
     public Mono<Product> save(Product product) {
         // TODO: เติม code ตรงนี้
-        return null; // ← แก้บรรทัดนี้
+            if (product.getId() == null) {
+            product.setId(java.util.UUID.randomUUID().toString());
+        }
+        return repository.save(product); // ← แก้บรรทัดนี้
     }
 
     // ── 4. ลบ Product ────────────────────────────────────
@@ -71,7 +75,7 @@ public class ProductService {
      */
     public Mono<Void> delete(String id) {
         // TODO: เติม code ตรงนี้
-        return null; // ← แก้บรรทัดนี้
+        return repository.deleteById(id); // ← แก้บรรทัดนี้
     }
 
     // ── 5. กรองตาม category ──────────────────────────────
@@ -80,7 +84,7 @@ public class ProductService {
      */
     public Flux<Product> getByCategory(String category) {
         // TODO: เติม code ตรงนี้
-        return null; // ← แก้บรรทัดนี้
+        return repository.findByCategory(category); // ← แก้บรรทัดนี้
     }
 
     // ── 6. คำนวณราคาหลังส่วนลด ───────────────────────────
@@ -92,6 +96,7 @@ public class ProductService {
      */
     public Mono<Double> getDiscountedPrice(String id) {
         // TODO: เติม code ตรงนี้
-        return null; // ← แก้บรรทัดนี้
+        
+        return getById(id).map(p -> p.getDiscountedPrice()); // ← แก้บรรทัดนี้
     }
 }
